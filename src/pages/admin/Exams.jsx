@@ -4,7 +4,7 @@ function Exams() {
   const [exams, setExams] = useState([
     {
       id: 1,
-      name: 'Kỳ thi giữa kỳ Toán học',
+      name: 'Bài thi giữa kỳ Toán học',
       quiz: 'Đề thi Toán học lớp 10',
       startDate: '2024-03-15',
       endDate: '2024-03-20',
@@ -16,7 +16,7 @@ function Exams() {
     },
     {
       id: 2,
-      name: 'Kỳ thi cuối kỳ Vật lý',
+      name: 'Bài thi cuối kỳ Vật lý',
       quiz: 'Đề thi Vật lý lớp 11',
       startDate: '2024-04-01',
       endDate: '2024-04-05',
@@ -28,7 +28,7 @@ function Exams() {
     },
     {
       id: 3,
-      name: 'Kỳ thi thử Hóa học',
+      name: 'Bài thi thử Hóa học',
       quiz: 'Đề thi Hóa học lớp 12',
       startDate: '2024-02-10',
       endDate: '2024-02-15',
@@ -123,8 +123,8 @@ function Exams() {
     <div className="w-full px-6 py-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Quản lý Kỳ thi</h1>
-          <p className="mt-1 text-sm text-gray-500">Quản lý tất cả kỳ thi trong hệ thống</p>
+          <h1 className="text-2xl font-bold text-gray-900">Quản lý Bài thi</h1>
+          <p className="mt-1 text-sm text-gray-500">Quản lý tất cả bài thi trong hệ thống</p>
         </div>
         <button
           onClick={() => handleOpenModal()}
@@ -133,7 +133,7 @@ function Exams() {
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
             <path d="M10 3a1 1 0 0 1 1 1v5h5a1 1 0 1 1 0 2h-5v5a1 1 0 1 1-2 0v-5H4a1 1 0 1 1 0-2h5V4a1 1 0 0 1 1-1Z" />
           </svg>
-          Thêm kỳ thi
+          Thêm bài thi
         </button>
       </div>
 
@@ -169,7 +169,7 @@ function Exams() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">ID</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Tên kỳ thi</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Tên bài thi</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Bộ đề thi</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Thời gian</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Thời lượng (phút)</th>
@@ -183,7 +183,7 @@ function Exams() {
               {filteredExams.length === 0 ? (
                 <tr>
                   <td colSpan="9" className="px-6 py-12 text-center text-sm text-gray-500">
-                    Không tìm thấy kỳ thi nào
+                    Không tìm thấy bài thi nào
                   </td>
                 </tr>
               ) : (
@@ -234,7 +234,7 @@ function Exams() {
           <div className="w-full max-w-2xl rounded-xl bg-white p-6 shadow-xl">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-gray-900">
-                {editingExam ? 'Chỉnh sửa kỳ thi' : 'Thêm kỳ thi mới'}
+                {editingExam ? 'Chỉnh sửa bài thi' : 'Thêm bài thi mới'}
               </h2>
               <button
                 onClick={handleCloseModal}
@@ -247,7 +247,7 @@ function Exams() {
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Tên kỳ thi</label>
+                <label className="block text-sm font-medium text-gray-700">Tên bài thi</label>
                 <input
                   type="text"
                   required
@@ -358,7 +358,7 @@ function Exams() {
           <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
             <h2 className="mb-4 text-xl font-bold text-gray-900">Xác nhận xóa</h2>
             <p className="mb-6 text-sm text-gray-600">
-              Bạn có chắc chắn muốn xóa kỳ thi này? Hành động này không thể hoàn tác.
+              Bạn có chắc chắn muốn xóa bài thi này? Hành động này không thể hoàn tác.
             </p>
             <div className="flex gap-3">
               <button

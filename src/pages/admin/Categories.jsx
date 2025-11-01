@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
 
 function Categories() {
+  // Dữ liệu bài thi mẫu (sẽ được lấy từ Exams page hoặc API)
+  const allExams = [
+    { id: 1, name: 'Bài thi giữa kỳ Toán học', category: 'Toán học', duration: 90, status: 'Đang diễn ra', participants: 45 },
+    { id: 2, name: 'Bài thi cuối kỳ Vật lý', category: 'Vật lý', duration: 60, status: 'Sắp diễn ra', participants: 32 },
+    { id: 3, name: 'Bài thi thử Hóa học', category: 'Hóa học', duration: 120, status: 'Đã kết thúc', participants: 28 },
+    { id: 4, name: 'Bài thi văn học lớp 10', category: 'Văn học', duration: 90, status: 'Sắp diễn ra', participants: 15 },
+    { id: 5, name: 'Bài thi văn học lớp 11', category: 'Văn học', duration: 90, status: 'Đang diễn ra', participants: 20 },
+  ];
+
   const [categories, setCategories] = useState([
-    { id: 1, name: 'Toán học', description: 'Các đề thi và câu hỏi về Toán học', questions: 150, quizzes: 12, status: 'Hoạt động', createdAt: '2024-01-15' },
-    { id: 2, name: 'Vật lý', description: 'Các đề thi và câu hỏi về Vật lý', questions: 120, quizzes: 8, status: 'Hoạt động', createdAt: '2024-01-20' },
-    { id: 3, name: 'Hóa học', description: 'Các đề thi và câu hỏi về Hóa học', questions: 95, quizzes: 6, status: 'Hoạt động', createdAt: '2024-02-01' },
-    { id: 4, name: 'Văn học', description: 'Các đề thi và câu hỏi về Văn học', questions: 80, quizzes: 5, status: 'Bị khóa', createdAt: '2024-02-10' },
+    { id: 1, name: 'Toán học', description: 'Các đề thi và câu hỏi về Toán học', status: 'Hoạt động', createdAt: '2024-01-15' },
+    { id: 2, name: 'Vật lý', description: 'Các đề thi và câu hỏi về Vật lý', status: 'Hoạt động', createdAt: '2024-01-20' },
+    { id: 3, name: 'Hóa học', description: 'Các đề thi và câu hỏi về Hóa học', status: 'Hoạt động', createdAt: '2024-02-01' },
+    { id: 4, name: 'Văn học', description: 'Các đề thi và câu hỏi về Văn học', status: 'Bị khóa', createdAt: '2024-02-10' },
   ]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [showExams, setShowExams] = useState(null); // ID của category đang xem bài thi
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -23,6 +33,11 @@ function Categories() {
     category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     category.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Lấy danh sách bài thi theo category
+  const getExamsByCategory = (categoryName) => {
+    return allExams.filter(exam => exam.category === categoryName);
+  };
 
   const handleOpenModal = (category = null) => {
     if (category) {
@@ -45,15 +60,13 @@ function Categories() {
     e.preventDefault();
     if (editingCategory) {
       setCategories(categories.map(c => c.id === editingCategory.id 
-        ? { ...formData, id: editingCategory.id, questions: editingCategory.questions, quizzes: editingCategory.quizzes, createdAt: editingCategory.createdAt }
+        ? { ...formData, id: editingCategory.id, createdAt: editingCategory.createdAt }
         : c
       ));
     } else {
       const newCategory = {
         ...formData,
         id: categories.length > 0 ? Math.max(...categories.map(c => c.id)) + 1 : 1,
-        questions: 0,
-        quizzes: 0,
         createdAt: new Date().toISOString().split('T')[0],
       };
       setCategories([...categories, newCategory]);
@@ -66,12 +79,30 @@ function Categories() {
     setDeleteConfirm(null);
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Đang diễn ra':
+        return 'bg-blue-100 text-blue-800';
+      case 'Sắp diễn ra':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'Đã kết thúc':
+        return 'bg-gray-100 text-gray-800';
+      case 'Đã hủy':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const categoryWithExams = showExams ? categories.find(c => c.id === showExams) : null;
+  const examsList = categoryWithExams ? getExamsByCategory(categoryWithExams.name) : [];
+
   return (
     <div className="w-full px-6 py-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Quản lý Danh mục</h1>
-          <p className="mt-1 text-sm text-gray-500">Quản lý tất cả danh mục trong hệ thống</p>
+          <p className="mt-1 text-sm text-gray-500">Xem bài thi theo từng danh mục</p>
         </div>
         <button
           onClick={() => handleOpenModal()}
@@ -116,51 +147,124 @@ function Categories() {
             <p className="text-sm text-gray-500">Không tìm thấy danh mục nào</p>
           </div>
         ) : (
-          filteredCategories.map((category) => (
-            <div key={category.id} className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
-              <div className="mb-4 flex items-start justify-between">
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900">{category.name}</h3>
-                  <p className="mt-1 text-sm text-gray-600">{category.description}</p>
+          filteredCategories.map((category) => {
+            const examsCount = getExamsByCategory(category.name).length;
+            return (
+              <div key={category.id} className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div className="mb-4 flex items-start justify-between">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-900">{category.name}</h3>
+                    <p className="mt-1 text-sm text-gray-600">{category.description}</p>
+                  </div>
+                  <span
+                    className={`ml-3 inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+                      category.status === 'Hoạt động'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'
+                    }`}
+                  >
+                    {category.status}
+                  </span>
                 </div>
-                <span
-                  className={`ml-3 inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-                    category.status === 'Hoạt động'
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-red-100 text-red-800'
-                  }`}
-                >
-                  {category.status}
-                </span>
-              </div>
-              <div className="mb-4 grid grid-cols-2 gap-4 border-t border-gray-100 pt-4">
-                <div>
-                  <div className="text-xs text-gray-500">Câu hỏi</div>
-                  <div className="mt-1 text-lg font-semibold text-gray-900">{category.questions}</div>
+                <div className="mb-4 border-t border-gray-100 pt-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-xs text-gray-500">Số lượng bài thi</div>
+                      <div className="mt-1 text-lg font-semibold text-gray-900">{examsCount}</div>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-xs text-gray-500">Bộ đề thi</div>
-                  <div className="mt-1 text-lg font-semibold text-gray-900">{category.quizzes}</div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowExams(category.id)}
+                    className="flex-1 rounded-lg border border-indigo-300 bg-indigo-50 px-3 py-2 text-sm font-medium text-indigo-700 transition-colors hover:bg-indigo-100"
+                  >
+                    Xem bài thi
+                  </button>
+                  <button
+                    onClick={() => handleOpenModal(category)}
+                    className="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100"
+                  >
+                    Sửa
+                  </button>
+                  <button
+                    onClick={() => setDeleteConfirm(category.id)}
+                    className="rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-100"
+                  >
+                    Xóa
+                  </button>
                 </div>
               </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleOpenModal(category)}
-                  className="flex-1 rounded-lg border border-indigo-300 bg-indigo-50 px-3 py-2 text-sm font-medium text-indigo-700 transition-colors hover:bg-indigo-100"
-                >
-                  Sửa
-                </button>
-                <button
-                  onClick={() => setDeleteConfirm(category.id)}
-                  className="flex-1 rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-100"
-                >
-                  Xóa
-                </button>
-              </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
+
+      {/* Modal hiển thị danh sách bài thi */}
+      {showExams && categoryWithExams && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-4xl rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">Bài thi thuộc danh mục: {categoryWithExams.name}</h2>
+                <p className="mt-1 text-sm text-gray-500">Tổng số: {examsList.length} bài thi</p>
+              </div>
+              <button
+                onClick={() => setShowExams(null)}
+                className="rounded-lg p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+                  <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+                </svg>
+              </button>
+            </div>
+            
+            {examsList.length === 0 ? (
+              <div className="py-12 text-center">
+                <p className="text-sm text-gray-500">Chưa có bài thi nào thuộc danh mục này</p>
+              </div>
+            ) : (
+              <div className="overflow-hidden rounded-lg border border-gray-200">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">ID</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Tên bài thi</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Thời lượng (phút)</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Thí sinh</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 bg-white">
+                    {examsList.map((exam) => (
+                      <tr key={exam.id} className="hover:bg-gray-50">
+                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">{exam.id}</td>
+                        <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">{exam.name}</td>
+                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-600">{exam.duration}</td>
+                        <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-600">{exam.participants}</td>
+                        <td className="whitespace-nowrap px-6 py-4 text-sm">
+                          <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(exam.status)}`}>
+                            {exam.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={() => setShowExams(null)}
+                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Add/Edit Modal */}
       {showModal && (

@@ -69,7 +69,7 @@ function AdminLayout() {
             <NavItem to="/admin/users" label="Người dùng" icon={icons.users} />
             <NavItem to="/admin/quizzes" label="Bộ đề thi" icon={icons.quizzes} />
             <NavItem to="/admin/questions" label="Câu hỏi" icon={icons.questions} />
-            <NavItem to="/admin/exams" label="Kỳ thi" icon={icons.exams} />
+            <NavItem to="/admin/exams" label="Bài thi" icon={icons.exams} />
             <NavItem to="/admin/results" label="Kết quả" icon={icons.results} />
             <NavItem to="/admin/categories" label="Danh mục" icon={icons.categories} />
             <div className="mx-2 my-3 h-px bg-white/10" />

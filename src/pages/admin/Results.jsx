@@ -5,7 +5,7 @@ function Results() {
     {
       id: 1,
       studentName: 'Nguyễn Văn A',
-      exam: 'Kỳ thi giữa kỳ Toán học',
+      exam: 'Bài thi giữa kỳ Toán học',
       score: 85,
       maxScore: 100,
       correctAnswers: 25,
@@ -17,7 +17,7 @@ function Results() {
     {
       id: 2,
       studentName: 'Trần Thị B',
-      exam: 'Kỳ thi cuối kỳ Vật lý',
+      exam: 'Bài thi cuối kỳ Vật lý',
       score: 92,
       maxScore: 100,
       correctAnswers: 36,
@@ -29,7 +29,7 @@ function Results() {
     {
       id: 3,
       studentName: 'Lê Văn C',
-      exam: 'Kỳ thi giữa kỳ Toán học',
+      exam: 'Bài thi giữa kỳ Toán học',
       score: 65,
       maxScore: 100,
       correctAnswers: 19,
@@ -41,7 +41,7 @@ function Results() {
     {
       id: 4,
       studentName: 'Phạm Thị D',
-      exam: 'Kỳ thi thử Hóa học',
+      exam: 'Bài thi thử Hóa học',
       score: 0,
       maxScore: 100,
       correctAnswers: 0,
@@ -55,7 +55,7 @@ function Results() {
   const [filterExam, setFilterExam] = useState('');
   const [showDetails, setShowDetails] = useState(null);
 
-  const exams = ['Kỳ thi giữa kỳ Toán học', 'Kỳ thi cuối kỳ Vật lý', 'Kỳ thi thử Hóa học'];
+  const exams = ['Bài thi giữa kỳ Toán học', 'Bài thi cuối kỳ Vật lý', 'Bài thi thử Hóa học'];
 
   const filteredResults = results.filter(result => {
     const matchesSearch = result.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -103,7 +103,7 @@ function Results() {
           </svg>
           <input
             type="text"
-            placeholder="Tìm kiếm theo tên thí sinh hoặc kỳ thi..."
+            placeholder="Tìm kiếm theo tên thí sinh hoặc bài thi..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full rounded-lg border border-gray-300 bg-white py-2 pl-10 pr-4 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
@@ -114,7 +114,7 @@ function Results() {
           onChange={(e) => setFilterExam(e.target.value)}
           className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
         >
-          <option value="">Tất cả kỳ thi</option>
+          <option value="">Tất cả bài thi</option>
           {exams.map((exam) => (
             <option key={exam} value={exam}>
               {exam}
@@ -165,7 +165,7 @@ function Results() {
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">ID</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Thí sinh</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Kỳ thi</th>
+                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Bài thi</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Điểm số</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Câu đúng</th>
                 <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700">Thời gian (phút)</th>
@@ -264,7 +264,7 @@ function Results() {
                       <div className="mt-1 text-base font-medium text-gray-900">{result.studentName}</div>
                     </div>
                     <div>
-                      <div className="text-sm text-gray-600">Kỳ thi</div>
+                      <div className="text-sm text-gray-600">Bài thi</div>
                       <div className="mt-1 text-base font-medium text-gray-900">{result.exam}</div>
                     </div>
                     <div>
